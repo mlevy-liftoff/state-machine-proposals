@@ -6,12 +6,9 @@ This repository contains two architectural proposals for an ad renderer that dyn
 
 ```
 .
-├── README.md (this file)
-├── COMPARISON.md                    # Side-by-side proposal comparison
-├── PERFORMANCE.md                   # Performance analysis for Preact
-├── PREACT_RENDERING.md              # Dynamic rendering examples
-├── DYNAMIC_RENDERING_SUMMARY.md     # Type lookup guide
-├── TYPE_LOOKUP_FLOW.md              # Visual type lookup comparison
+├── README.md              # This file
+├── COMPARISON.md          # Architectural comparison
+├── PERFORMANCE.md         # Performance analysis
 │
 ├── proposal-1/                      # Context-Based Approach
 │   ├── input.json                   # Server input format

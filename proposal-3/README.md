@@ -82,7 +82,6 @@ Your custom state machine service now has **native invoke support** ✨:
 - ✅ `onDone` and `onError` callbacks
 - ✅ Nested invoke support
 
-See [INVOKE_IMPLEMENTATION.md](INVOKE_IMPLEMENTATION.md) for details.
 
 ## Usage
 
@@ -259,16 +258,19 @@ State debug info included in dev builds:
 
 Remove in production via build config.
 
-## Comparison with Proposal 2
+## Comparison with Other Proposals
 
-Both use state-based architecture, but Proposal 3 is production-ready:
-- ✅ Native invoke (no wrappers)
-- ✅ Type-safe implementation
-- ✅ Helper functions
-- ✅ Complete renderer
-- ✅ Error handling
+**vs Proposal 1 (Context-Based):**
+- Simpler mental model (state = child vs activeId pointer)
+- Better performance (60-80% less memory)
+- Cleaner type lookup (2 steps vs 3)
 
-See [vs-PROPOSAL-2.md](vs-PROPOSAL-2.md) for detailed comparison.
+**vs Proposal 2 (Educational):**
+- Production-ready code (vs verbose examples)
+- Complete renderer (vs basic examples)
+- Helper functions (vs inline code)
+
+See [COMPARISON.md](../../COMPARISON.md) for detailed architectural comparison.
 
 ## Service Features
 

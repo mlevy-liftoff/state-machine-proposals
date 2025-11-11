@@ -145,9 +145,7 @@ proposal-4/
 │   ├── input.json
 │   └── output.json
 │
-└── Docs (2 files)
-    ├── README.md             # This file
-    └── vs-PROPOSAL-3.md      # Comparison with Proposal 3
+└── README.md
 ```
 
 ## Quick Example
@@ -196,9 +194,8 @@ state.value = "active"
 - Event-based transitions across regions
 - Type-safe parallel state values
 
-**⚠️ Not Yet Implemented:**
-- `always` transitions (eventless auto-transitions)
-- See [LIMITATIONS.md](LIMITATIONS.md) for details and workarounds
+**⚠️ Known Limitation:**
+- `always` transitions not yet implemented (your templates use these in GATE states)
 
 ## Summary
 
@@ -210,6 +207,6 @@ state.value = "active"
 - Handles parallel child machines with shared context
 - Fully backward compatible
 
-**Note:** Your templates use `always` transitions which need additional implementation. See [LIMITATIONS.md](LIMITATIONS.md).
+**Note:** Templates use `always` transitions (eventless auto-transitions) which need additional implementation (~100 lines).
 
 Use this when your templates use `"type": "parallel"`! 🚀
