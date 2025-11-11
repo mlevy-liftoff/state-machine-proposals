@@ -1,0 +1,486 @@
+{
+  "statemachine": {
+    "id": "ad",
+    "initial": "loading",
+    "context": {
+      "primedCount": 0
+    },
+    "states": {
+      "loading": {
+        "entry": [
+          "beginPreload"
+        ],
+        "on": {
+          "always": {
+            "target": "main_video",
+            "cond": "isPrimedEnough"
+          }
+        }
+      },
+      "main_video": {
+        "meta": {
+          "type": "video"
+        },
+        "invoke": {
+          "id": "main_video",
+          "src": "videoChild",
+          "data": {
+            "id": "main_video",
+            "close": {
+              "countdown": true,
+              "delay": "0",
+              "style": 1
+            },
+            "muted": false,
+            "progressBar": {
+              "color": "#FF0000"
+            }
+          }
+        },
+        "on": {
+          "NEXT": {
+            "target": "html_endcard"
+          }
+        }
+      },
+      "html_endcard": {
+        "meta": {
+          "type": "endcard"
+        },
+        "invoke": {
+          "id": "html_endcard",
+          "src": "endcardChild",
+          "data": {
+            "id": "html_endcard",
+            "close": {
+              "countdown": true,
+              "delay": "5",
+              "style": 1
+            }
+          }
+        },
+        "on": {
+          "NEXT": {
+            "target": "p2v_video"
+          }
+        }
+      },
+      "p2v_video": {
+        "meta": {
+          "type": "video"
+        },
+        "invoke": {
+          "id": "p2v_video",
+          "src": "videoChild",
+          "data": {
+            "id": "p2v_video",
+            "close": {
+              "countdown": true,
+              "delay": "5",
+              "style": 1
+            },
+            "muted": false,
+            "progressBar": {
+              "color": "#FF0000"
+            }
+          }
+        },
+        "entry": [
+          "showAppStore"
+        ],
+        "on": {
+          "NEXT": {
+            "target": "lcec"
+          }
+        }
+      },
+      "lcec": {
+        "meta": {
+          "type": "endcard"
+        },
+        "invoke": {
+          "id": "lcec",
+          "src": "endcardChild",
+          "data": {
+            "id": "lcec",
+            "close": {
+              "countdown": true,
+              "delay": "5",
+              "style": 1
+            }
+          }
+        },
+        "on": {
+          "NEXT": {
+            "target": "closed"
+          }
+        }
+      },
+      "closed": {
+        "entry": [
+          "closeAd"
+        ],
+        "type": "final"
+      }
+    }
+  },
+  "templates": {
+    "video": {
+      "type": "parallel",
+      "initial": "LOADING",
+      "context": {
+        "currentTime": 0,
+        "duration": 0,
+        "progress": 0,
+        "videoHeight": 0,
+        "videoWidth": 0,
+        "videoElement": null,
+        "loadAttempts": -1,
+        "canPlay": false,
+        "loopCount": 0,
+        "orientation": "unknown",
+        "videoPlayer": "progressive"
+      },
+      "states": {
+        "player": {
+          "initial": "LOADING",
+          "states": {
+            "LOADING": {
+              "entry": [
+                "incrementLoadAttempts",
+                "emitLoad"
+              ],
+              "on": {
+                "LOAD_FAIL": {
+                  "target": "LOAD_FAIL_RETRY"
+                },
+                "AWAIT_VIEWABILITY": {
+                  "target": "AWAITING_VIEWABILITY",
+                  "actions": "setMetadata"
+                },
+                "CAN_PLAY": {
+                  "target": "PLAYING",
+                  "actions": [
+                    "setMetadata",
+                    "reportVideoStart",
+                    "setCanPlay"
+                  ]
+                },
+                "PAUSE": "STALLED",
+                "DURATION_CHANGE": {
+                  "actions": "emitDurationChange"
+                },
+                "WAITING": {
+                  "actions": "emitWaiting"
+                },
+                "SUSPEND": {
+                  "actions": "emitSuspend"
+                },
+                "FAIL": "FAILED"
+              }
+            },
+            "LOAD_FAIL_RETRY": {
+              "on": {
+                "RETRY": "LOADING",
+                "FAIL": "FAILED"
+              }
+            },
+            "AWAITING_VIEWABILITY": {
+              "entry": "emitAwaitingViewability",
+              "on": {
+                "MAXIMIZE": {
+                  "target": "PLAYING",
+                  "actions": [
+                    "reportVideoStart",
+                    "setCanPlay"
+                  ]
+                }
+              }
+            },
+            "PLAYING": {
+              "entry": "emitPlay",
+              "on": {
+                "MINIMIZE": {
+                  "target": "PAUSED",
+                  "actions": "updateCurrentTime"
+                },
+                "PAUSE": "PAUSED",
+                "END": {
+                  "target": "ENDED",
+                  "actions": "emitVideoCompleteEvents"
+                },
+                "RESTART": {
+                  "actions": [
+                    "pauseVideoElement",
+                    "resetProgress",
+                    "resetCurrentTime",
+                    "playVideoElement"
+                  ]
+                },
+                "AUTO_PLAY_FAIL": "AUTO_PLAY_FAIL",
+                "TIME_UPDATE": {
+                  "actions": [
+                    "updateProgress",
+                    "emitProgress",
+                    "emitCheckpointEvent",
+                    "emitTimeUpdate"
+                  ]
+                },
+                "SUSPEND": {
+                  "actions": "emitSuspend"
+                },
+                "WAITING": {
+                  "actions": "emitWaiting"
+                },
+                "CLOSE": {
+                  "target": "FINAL",
+                  "actions": "emitClose"
+                }
+              }
+            },
+            "STALLED": {
+              "on": {
+                "AWAIT_VIEWABILITY": {
+                  "target": "DO_NOT_PLAY",
+                  "actions": "setMetadata"
+                },
+                "CAN_PLAY": {
+                  "target": "DO_NOT_PLAY",
+                  "actions": "setMetadata"
+                },
+                "PLAY": "LOADING"
+              }
+            },
+            "DO_NOT_PLAY": {
+              "on": {
+                "PLAY": {
+                  "target": "PLAYING",
+                  "actions": [
+                    "reportVideoStart",
+                    "setCanPlay"
+                  ]
+                }
+              }
+            },
+            "PAUSED": {
+              "entry": "emitPause",
+              "on": {
+                "MINIMIZE": {
+                  "actions": "updateCurrentTime"
+                },
+                "CAN_PLAY": {
+                  "actions": "setCanPlay"
+                },
+                "MAXIMIZE": {
+                  "target": "PLAYING",
+                  "actions": "resetCurrentTime"
+                },
+                "PLAY": "PLAYING",
+                "TIME_UPDATE": {
+                  "actions": [
+                    "updateProgress",
+                    "emitProgress",
+                    "emitCheckpointEvent"
+                  ]
+                },
+                "AUTO_PLAY_FAIL": "AUTO_PLAY_FAIL",
+                "CLOSE": {
+                  "target": "FINAL",
+                  "actions": "emitClose"
+                },
+                "RESET_PLAY": {
+                  "actions": [
+                    "resetProgress",
+                    "resetCurrentTime"
+                  ]
+                }
+              }
+            },
+            "AUTO_PLAY_FAIL": {
+              "entry": [
+                "standbyTimers",
+                "pauseAllIntervals"
+              ],
+              "on": {
+                "PLAY": {
+                  "target": "PLAYING",
+                  "actions": [
+                    "wakeTimers",
+                    "startAllIntervals"
+                  ]
+                }
+              }
+            },
+            "ENDED": {
+              "on": {
+                "PLAY": {
+                  "target": "PLAYING",
+                  "actions": [
+                    "incrementLoopCount",
+                    "disableTheatreMode",
+                    "resetProgress",
+                    "resetCurrentTime"
+                  ]
+                },
+                "PAUSE": "PAUSED",
+                "CLOSE": {
+                  "target": "FINAL",
+                  "actions": "emitCloseFullyPlayed"
+                }
+              }
+            },
+            "FINAL": {
+              "on": {
+                "PLAY": {
+                  "target": "PLAYING",
+                  "actions": "reportVideoStart"
+                }
+              }
+            },
+            "FAILED": {}
+          }
+        },
+        "appStoreOnDelay": {
+          "initial": "GATE",
+          "states": {
+            "GATE": {
+              "always": [
+                {
+                  "target": "WAITING",
+                  "cond": "canStartTimer"
+                },
+                {
+                  "target": "IDLE"
+                }
+              ]
+            },
+            "IDLE": {
+              "on": {
+                "SET_READY": {
+                  "target": "GATE",
+                  "actions": [
+                    "SET_CAN_START_TIMER"
+                  ]
+                }
+              }
+            },
+            "WAITING": {
+              "after": {
+                "4000": {
+                  "target": "SHOWING",
+                  "cond": "shouldOpenAppStore"
+                }
+              }
+            },
+            "SHOWING": {
+              "entry": [
+                "OPEN_APP_STORE"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "endcard": {
+      "type": "parallel",
+      "states": {
+        "html": {
+          "initial": "loading",
+          "states": {
+            "loading": {
+              "on": {
+                "IFRAME_LOADED": "rendered",
+                "IFRAME_ERROR": "error"
+              }
+            },
+            "rendered": {},
+            "error": {}
+          }
+        },
+        "appStoreOnDelay": {
+          "initial": "GATE",
+          "states": {
+            "GATE": {
+              "always": [
+                {
+                  "target": "WAITING",
+                  "cond": "canStartTimer"
+                },
+                {
+                  "target": "IDLE"
+                }
+              ]
+            },
+            "IDLE": {
+              "on": {
+                "SET_READY": {
+                  "target": "GATE",
+                  "actions": "SET_CAN_START_TIMER"
+                }
+              }
+            },
+            "WAITING": {
+              "after": {
+                "4000": {
+                  "target": "SHOWING",
+                  "cond": "shouldOpenAppStore"
+                }
+              }
+            },
+            "SHOWING": {
+              "entry": ["OPEN_APP_STORE"]
+            }
+          }
+        }
+      }
+    },
+    "image": {
+      "type": "parallel",
+      "states": {
+        "image": {
+          "initial": "loading",
+          "states": {
+            "loading": {},
+            "rendered": {},
+            "error": {}
+          }
+        },
+        "appStoreOnDelay": {
+          "initial": "GATE",
+          "states": {
+            "GATE": {
+              "always": [
+                {
+                  "target": "WAITING",
+                  "cond": "canStartTimer"
+                },
+                {
+                  "target": "IDLE"
+                }
+              ]
+            },
+            "IDLE": {
+              "on": {
+                "SET_READY": {
+                  "target": "GATE",
+                  "actions": "SET_CAN_START_TIMER"
+                }
+              }
+            },
+            "WAITING": {
+              "after": {
+                "4000": {
+                  "target": "SHOWING",
+                  "cond": "shouldOpenAppStore"
+                }
+              }
+            },
+            "SHOWING": {
+              "entry": ["OPEN_APP_STORE"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

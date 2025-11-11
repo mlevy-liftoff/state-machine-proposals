@@ -1,0 +1,74 @@
+{
+  "statemachine": {
+    "id": "VideoPlayableVideo",
+    "initial": "main_video",
+    "states": {
+      "main_video": {
+        "type": "video",
+        "settings": {
+          "close": {
+            "countdown": true,
+            "delay": "0",
+            "style": 1
+          },
+          "muted": false,
+          "progressBar": {
+            "color": "#FF0000"
+          }
+        },
+        "on": {
+          "NEXT": {
+            "target": "html_endcard"
+          }
+        }
+      },
+      "html_endcard": {
+        "type": "endcard",
+        "settings": {
+          "close": {
+            "countdown": true,
+            "delay": "5",
+            "style": 1
+          }
+        },
+        "on": {
+          "NEXT": {
+            "target": "p2v_video"
+          }
+        }
+      },
+      "p2v_video": {
+        "type": "video",
+        "settings": {
+          "close": {
+            "countdown": true,
+            "delay": "5",
+            "style": 1
+          },
+          "muted": false,
+          "progressBar": {
+            "color": "#FF0000"
+          }
+        },
+        "entry": [
+          "showAppStore"
+        ],
+        "on": {
+          "NEXT": {
+            "target": "closed"
+          },
+          "LAST_CHANCE_ENDCARD": {
+            "actions": [
+              "showLastChanceEndcard"
+            ]
+          }
+        }
+      },
+      "closed": {
+        "entry": [
+          "closeAd"
+        ]
+      }
+    }
+  }
+}
