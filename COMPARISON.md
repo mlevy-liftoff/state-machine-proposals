@@ -79,19 +79,13 @@ Parent Machine
 {
   "states": {
     "main_video": {
-      "invoke": {
-        "src": "videoChild",
-        "data": { "id": "main_video", "settings": {...} }
-      },
+      "template": "video",
       "on": {
         "NEXT": { "target": "html_endcard" }
       }
     },
     "html_endcard": {
-      "invoke": {
-        "src": "endcardChild",
-        "data": { "id": "html_endcard", "settings": {...} }
-      },
+      "template": "endcard",
       "on": {
         "NEXT": { "target": "p2v_video" }
       }

@@ -21,22 +21,7 @@
         "meta": {
           "type": "video"
         },
-        "invoke": {
-          "id": "main_video",
-          "src": "videoChild",
-          "data": {
-            "id": "main_video",
-            "close": {
-              "countdown": true,
-              "delay": "0",
-              "style": 1
-            },
-            "muted": false,
-            "progressBar": {
-              "color": "#FF0000"
-            }
-          }
-        },
+        "template": "video",
         "on": {
           "NEXT": {
             "target": "html_endcard"
@@ -47,7 +32,7 @@
         "meta": {
           "type": "endcard"
         },
-        "invoke": {
+        "template": {
           "id": "html_endcard",
           "src": "endcardChild",
           "data": {
@@ -69,7 +54,7 @@
         "meta": {
           "type": "video"
         },
-        "invoke": {
+        "template": {
           "id": "p2v_video",
           "src": "videoChild",
           "data": {
@@ -98,7 +83,7 @@
         "meta": {
           "type": "endcard"
         },
-        "invoke": {
+        "template": {
           "id": "lcec",
           "src": "endcardChild",
           "data": {

@@ -3,7 +3,9 @@
     "id": "ad",
     "initial": "loading",
     "context": {
-      "primedCount": 0
+      "muted": true
+    },
+    "meta": {
     },
     "states": {
       "loading": {
@@ -19,24 +21,8 @@
       },
       "main_video": {
         "meta": {
-          "type": "video"
         },
-        "invoke": {
-          "id": "main_video",
-          "src": "videoChild",
-          "data": {
-            "id": "main_video",
-            "close": {
-              "countdown": true,
-              "delay": "0",
-              "style": 1
-            },
-            "muted": false,
-            "progressBar": {
-              "color": "#FF0000"
-            }
-          }
-        },
+        "template": "video",
         "on": {
           "NEXT": {
             "target": "html_endcard"
@@ -45,20 +31,8 @@
       },
       "html_endcard": {
         "meta": {
-          "type": "endcard"
         },
-        "invoke": {
-          "id": "html_endcard",
-          "src": "endcardChild",
-          "data": {
-            "id": "html_endcard",
-            "close": {
-              "countdown": true,
-              "delay": "5",
-              "style": 1
-            }
-          }
-        },
+        "template": "endcard",
         "on": {
           "NEXT": {
             "target": "p2v_video"
@@ -67,24 +41,8 @@
       },
       "p2v_video": {
         "meta": {
-          "type": "video"
         },
-        "invoke": {
-          "id": "p2v_video",
-          "src": "videoChild",
-          "data": {
-            "id": "p2v_video",
-            "close": {
-              "countdown": true,
-              "delay": "5",
-              "style": 1
-            },
-            "muted": false,
-            "progressBar": {
-              "color": "#FF0000"
-            }
-          }
-        },
+        "template": "video",
         "entry": [
           "showAppStore"
         ],
@@ -96,20 +54,8 @@
       },
       "lcec": {
         "meta": {
-          "type": "endcard"
         },
-        "invoke": {
-          "id": "lcec",
-          "src": "endcardChild",
-          "data": {
-            "id": "lcec",
-            "close": {
-              "countdown": true,
-              "delay": "5",
-              "style": 1
-            }
-          }
-        },
+        "template": "endcard",
         "on": {
           "NEXT": {
             "target": "closed"

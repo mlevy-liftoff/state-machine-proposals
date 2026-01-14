@@ -21,21 +21,9 @@
         "meta": {
           "type": "video"
         },
-        "invoke": {
+        "template": {
           "id": "main_video",
-          "src": "videoChild",
-          "data": {
-            "id": "main_video",
-            "close": {
-              "countdown": true,
-              "delay": "0",
-              "style": 1
-            },
-            "muted": false,
-            "progressBar": {
-              "color": "#FF0000"
-            }
-          }
+          "src": "videoChild"
         },
         "entry": [
           "activateChild"
@@ -56,20 +44,8 @@
       },
       "html_endcard": {
         "meta": {
-          "type": "endcard"
         },
-        "invoke": {
-          "id": "html_endcard",
-          "src": "endcardChild",
-          "data": {
-            "id": "html_endcard",
-            "close": {
-              "countdown": true,
-              "delay": "5",
-              "style": 1
-            }
-          }
-        },
+        "template": "endcard",
         "entry": [
           "activateChild"
         ],
@@ -91,7 +67,7 @@
         "meta": {
           "type": "video"
         },
-        "invoke": {
+        "template": {
           "id": "p2v_video",
           "src": "videoChild",
           "data": {

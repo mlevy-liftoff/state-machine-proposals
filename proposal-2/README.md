@@ -52,19 +52,11 @@ Each input state becomes a parent state that **invokes** the appropriate child:
 {
   "states": {
     "main_video": {
-      "invoke": {
-        "id": "main_video",
-        "src": "videoChild",
-        "data": { /* settings from input */ }
-      },
+      "template": "video",
       "on": { "NEXT": { "target": "html_endcard" } }
     },
     "html_endcard": {
-      "invoke": {
-        "id": "html_endcard", 
-        "src": "endcardChild",
-        "data": { /* settings from input */ }
-      },
+      "template": "endcard",
       "on": { "NEXT": { "target": "p2v_video" } }
     }
   }
@@ -76,11 +68,8 @@ Each input state becomes a parent state that **invokes** the appropriate child:
 The server transforms input states into output states by:
 
 1. Creating a state for each input state
-2. Adding `meta` field with:
-   - `type`: The child type from input (`video`, `endcard`, `image`)
-3. Adding `invoke` config with:
-   - `src`: Maps type to child factory (`videoChild`, `endcardChild`, `imageChild`)
-   - `data`: Passes settings as child context
+2. Adding `meta` field
+3. Adding `template` config with value according to type (`video`, `endcard`, `image`, `composite`, `modular`)
 4. Preserving transitions from input `on` handlers
 5. Preserving entry/exit actions
 
@@ -102,10 +91,7 @@ The server transforms input states into output states by:
 {
   "main_video": {
     "meta": { "type": "video" },
-    "invoke": {
-      "src": "videoChild",
-      "data": { "id": "main_video", "muted": false }
-    },
+    "template": "video",
     "on": { "NEXT": { "target": "html_endcard" } }
   }
 }
