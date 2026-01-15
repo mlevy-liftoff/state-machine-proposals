@@ -1,0 +1,58 @@
+{
+"statemachine": {
+  "id": "single_modular",
+  "initial": "modular_0",
+  "states": {
+    "modular_0": {
+      "type": "modular",
+      "settings": {
+        "close": {
+          "countdown": true,
+          "delay": "5",
+          "style": 1
+        },
+        "children": ["video_0", "video_1"]
+      },
+      "on": {
+        "NEXT": {
+          "target": "closed"
+        }
+      }
+    },
+    "video_0": {
+      "type": "video",
+      "settings": {
+        "muted": true
+      },
+      "on": {
+        "COMPLETE": {
+          "target": "video_1"
+        },
+        "NEXT": {
+          "target": "video_1"
+        }
+      }
+    },
+    "video_1": {
+      "type": "video",
+      "settings": {
+        "muted": true
+      },
+      "on": {
+        "COMPLETE": {
+          "target": "video_0"
+        },
+        "NEXT": {
+          "target": "video_0"
+        }
+      }
+    },
+    "closed": {
+      "entry": [
+        "closeAd"
+      ]
+    }
+  }
+},
+"vmoverrides": {}
+}
