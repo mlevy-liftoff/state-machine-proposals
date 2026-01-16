@@ -3,7 +3,9 @@
     "id": "ad",
     "initial": "loading",
     "context": {
-      "primedCount": 0
+      "globalTimer": 60
+    },
+    "meta": {
     },
     "states": {
       "loading": {
@@ -19,12 +21,8 @@
       },
       "main_video": {
         "meta": {
-          "type": "video"
         },
-        "template": {
-          "id": "main_video",
-          "src": "videoChild"
-        },
+        "template": "video",
         "entry": [
           "activateChild"
         ],
@@ -65,24 +63,8 @@
       },
       "p2v_video": {
         "meta": {
-          "type": "video"
         },
-        "template": {
-          "id": "p2v_video",
-          "src": "videoChild",
-          "data": {
-            "id": "p2v_video",
-            "close": {
-              "countdown": true,
-              "delay": "5",
-              "style": 1
-            },
-            "muted": false,
-            "progressBar": {
-              "color": "#FF0000"
-            }
-          }
-        },
+        "template": "video",
         "entry": [
           "activateChild",
           "showAppStore"
@@ -109,8 +91,7 @@
       "closed": {
         "entry": [
           "closeAd"
-        ],
-        "type": "final"
+        ]
       }
     }
   },

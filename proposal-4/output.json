@@ -65,8 +65,7 @@
       "closed": {
         "entry": [
           "closeAd"
-        ],
-        "type": "final"
+        ]
       }
     }
   },
