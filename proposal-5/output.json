@@ -1,0 +1,192 @@
+{
+  "statemachine": {
+    "id": "VideoPlayableVideo",
+    "initial": "main_video",
+    "states": {
+      "main_video": {
+        "type": "parallel",
+        "onDone": "html_endcard",
+        "meta": {
+          "close": {
+            "countdown": true,
+            "delay": "0",
+            "style": 1
+          },
+          "muted": false,
+          "progressBar": {
+            "color": "#FF0000"
+          }
+        },
+        "states": {
+          "player": {
+            "template": "player",
+            "config": {
+              "looping": false
+            }
+          },
+          "appStoreOverlay": {
+            "template": "appStoreOverlay"
+          }
+        }
+      },
+      "html_endcard": {
+        "type": "parallel",
+        "onDone": "p2v_video",
+        "meta": {
+          "close": {
+            "countdown": true,
+            "delay": "5",
+            "style": 1
+          }
+        },
+        "states": {
+          "content": {
+            "template": "renderContent"
+          },
+          "appStoreOverlay": {
+            "template": "appStoreOverlay"
+          }
+        }
+      },
+      "p2v_video": {
+        "type": "parallel",
+        "onDone": "closed",
+        "entry": [
+          "showAppStore"
+        ],
+        "meta": {
+          "close": {
+            "countdown": true,
+            "delay": "5",
+            "style": 1
+          },
+          "muted": false,
+          "progressBar": {
+            "color": "#FF0000"
+          }
+        },
+        "states": {
+          "player": {
+            "template": "player",
+            "config": {
+              "looping": false,
+              "on": {
+                "LAST_CHANCE_ENDCARD": {
+                  "actions": [
+                    "showLastChanceEndcard"
+                  ]
+                }
+              }
+            }
+          },
+          "appStoreOverlay": {
+            "template": "appStoreOverlay"
+          }
+        }
+      },
+      "closed": {
+        "type": "final",
+        "entry": [
+          "closeAd"
+        ]
+      }
+    }
+  },
+  "templates": {
+    "player": {
+      "initial": "initial",
+      "states": {
+        "initial": {
+          "always": "loading"
+        },
+        "loading": {
+          "on": {
+            "PLAY": "playing"
+          }
+        },
+        "playing": {
+          "on": {
+            "PAUSE": "paused",
+            "END": "ended",
+            "ERROR": "error"
+          }
+        },
+        "paused": {
+          "on": {
+            "PLAY": "playing",
+            "END": "ended",
+            "ERROR": "error"
+          }
+        },
+        "ended": {
+          "always": [
+            {
+              "target": "playing",
+              "guard": "isLooping"
+            },
+            {
+              "target": "final"
+            }
+          ]
+        },
+        "error": {
+          "type": "final"
+        },
+        "final": {
+          "type": "final"
+        }
+      }
+    },
+    "appStoreOverlay": {
+      "initial": "initial",
+      "states": {
+        "initial": {
+          "on": {
+            "SHOW_OVERLAY": "show",
+            "END": "final"
+          }
+        },
+        "show": {
+          "on": {
+            "HIDE_OVERLAY": "hide",
+            "END": "final"
+          }
+        },
+        "hide": {
+          "on": {
+            "SHOW_OVERLAY": "show",
+            "END": "final"
+          }
+        },
+        "final": {
+          "type": "final"
+        }
+      }
+    },
+    "renderContent": {
+      "initial": "initial",
+      "states": {
+        "initial": {
+          "always": "loading"
+        },
+        "loading": {
+          "on": {
+            "RENDER": "rendering"
+          }
+        },
+        "rendering": {
+          "on": {
+            "END": "final",
+            "ERROR": "error"
+          }
+        },
+        "error": {
+          "type": "final"
+        },
+        "final": {
+          "type": "final"
+        }
+      }
+    }
+  }
+}
