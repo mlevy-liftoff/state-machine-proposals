@@ -1,0 +1,67 @@
+{
+    "statemachine": {
+      "id": "CompositeSplitScreen",
+      "states": {
+        "closed": {
+          "entry": [
+            "closeAd"
+          ]
+        },
+        "composite_0": {
+          "type": "composite",
+          "settings": {
+            "close": {
+              "countdown": true,
+              "delay": "3",
+              "style": 0
+            },
+            "html": "PHZtLWNvbXBvc2l0ZT4KICA8c3R5bGU+CiAgICAubGF5b3V0IHsKICAgICAgaGVpZ2h0OiAxMDB2aDsKICAgICAgZGlzcGxheTogZ3JpZDsKICAgICAgZ3JpZC10ZW1wbGF0ZS1yb3dzOiAyNSUgMWZyOwogICAgfQogICAgLnJvdyB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICB9CiAgPC9zdHlsZT4KICA8ZGl2IGNsYXNzPSJsYXlvdXQiPgogICAgPGRpdiBjbGFzcz0icm93Ij4KICAgICAgPHZtLWNvbXBvbmVudCBzY2VuZS1pZD0iZ2FtZXBsYXlfdmlkZW8iPjwvdm0tY29tcG9uZW50PgogICAgPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJyb3ciPgogICAgICA8dm0tY29tcG9uZW50IHNjZW5lLWlkPSJodG1sX2VuZGNhcmQiPjwvdm0tY29tcG9uZW50PgogICAgPC9kaXY+CiAgPC9kaXY+Cjwvdm0tY29tcG9zaXRlPgo=",
+            "children": [
+              "gameplay_video",
+              "html_endcard"
+            ]
+          },
+          "on": {
+            "NEXT": {
+              "target": "closed"
+            }
+          }
+        },
+        "html_endcard": {
+          "type": "endcard",
+          "settings": {
+            "close": {
+              "delay": "3",
+              "style": 1,
+              "countdown": true
+            }
+          },
+          "on": {
+            "NEXT": {
+              "target": "closed"
+            }
+          }
+        },
+        "gameplay_video": {
+          "type": "video",
+          "settings": {
+            "close": {
+              "delay": "3",
+              "style": 1,
+              "countdown": true
+            },
+            "progressBar": {
+              "show": false
+            }
+          },
+          "on": {
+            "NEXT": {
+              "target": "closed"
+            }
+          }
+        }
+      },
+      "initial": "composite_0"
+    },
+    "vmoverrides": {}
+  }
